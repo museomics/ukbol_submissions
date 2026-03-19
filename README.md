@@ -20,7 +20,9 @@ Each is desgined based on instructions and requirements set by ENA as under thei
 </p
 
 
-## Requirements 
+#
+
+## Requirements
 
 **1. A valid ENA Webin login**
 An account can be registered [here](https://www.ebi.ac.uk/ena/submit/webin/login)
@@ -101,7 +103,7 @@ And this below the header row
 The TSV files are then ready for submission via the ENA Webin.
 
 <p align="center">
-  <img src="https://github.com/museomics/ukbol_submissions/blob/main/img/ENA_sample_registration.png" width="600" height="500"
+  <img src="https://github.com/museomics/ukbol_submissions/blob/main/img/ENA_sample_registration.png" width="400" height="300"
     alt="ENA Webin sample registration">
 </p
 
@@ -126,11 +128,14 @@ This information is needed in a single TSV file that can be used to generate a [
 |"uploaded file 2"|Gzipped reverse filepath - `uploaded.file.2`| 
 
 
-### To generate that TSV:
+**To generate that TSV:**
 
 1. CSV: ENA registered sample metadata - this can be downloaded directly from the ENA webin site (must contain at minimum sample accession (`sample_accession`) and unique sample name - in this case we use `sample_alias`) 
 
-![ENA Webin Sample metadata download](https://github.com/museomics/ukbol_submissions/blob/main/img/ENA_sample_download.png)
+<p align="center">
+  <img src="https://github.com/museomics/ukbol_submissions/blob/main/img/ENA_sample_download.png" width="400" height="300"
+    alt="ENA Webin Sample metadata download">
+</p
 
 2. CSV: Sequence filepaths - this must have a minimum of 3 columns, unique sample name (`sample_alias`), forward read filepath (`uploaded.file.1`) and reverse read filepath (`uploaded.file.2`)
 
@@ -141,7 +146,6 @@ This tool takes the TSV and generates individual manifests before submitting the
 
 To validate the TSV and generate the manifests the command would look like the following: 
 ```
-
 python /path/to/ena-bulk-webincli/bulk_webincli.py -u Webin-XXXXX -p XXXXXX -g reads -s sequence_submission_.tsv -m validate -d UKBOL_accelerated --webinCliPath /path/to/ena-bulk-webincli/webin-cli-9.0.1.jar
 ```
 
@@ -150,7 +154,6 @@ To submit the manifests run change `-m validate` to `-m submit`:
 
 ```
 python /path/to/ena-bulk-webincli/bulk_webincli.py -u Webin-XXXXX -p XXXXXX -g reads -s sequence_submission_.tsv -m submit -d UKBOL_accelerated --webinCliPath /path/to/ena-bulk-webincli/webin-cli-9.0.1.jar
-
 ```
 
 ## Mitogenome assembly submissions
