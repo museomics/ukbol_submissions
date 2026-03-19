@@ -1,4 +1,4 @@
-# ENA SUBMISSIONS SOP AND WORKING CODE FOR UKBOL ACCELERATED
+# ENA SUBMISSIONS SOP FOR UKBOL ACCELERATED
 
 <p align="center">
   <img src="https://github.com/museomics/ukbol_submissions/blob/main/img/UKBOL%20dragonfly.png" width="200" height="200"
@@ -7,38 +7,33 @@
 
 **Date:** 2026-03-19
 
-**Author:** Maria Kamouyiaros
+**Author:** Maria Kamouyiaros@NHMUK
 
 ## Background
 The following steps were used to prepare all files needed for submission of genomic skim data generated in UKBOL_Accelerated to the [European Nucleotide Archive (ENA)](https://www.ebi.ac.uk/ena/browser/home).
-Each is desgined based on instructions and requirements set by ENA as under their ENA metadata model. 
+Each is desgined based on instructions and requirements set by ENA as under their [ENA metadata model](https://ena-docs.readthedocs.io/en/latest/submit/general-guide/metadata.html). 
 
 <p align="center">
   <img src="https://github.com/museomics/ukbol_submissions/blob/main/img/ENA_metadata_model.png" width="600" height="500"
     alt="ENA metadata model flowchart">
+  <figcaption>Image taken from ENA's general guide. </figcaption>
 </p
-  
-###### Image taken from ENA's general guide. For more detailed information on their metadata model see [here](https://ena-docs.readthedocs.io/en/latest/submit/general-guide/metadata.html).
 
-## Requirements
 
-### 1. A valid ENA Webin login
-  An account can be registered [here](https://www.ebi.ac.uk/ena/submit/webin/login)
+## Requirements 
 
-### 2. A registered study and study accession number
+**1. A valid ENA Webin login**
+An account can be registered [here](https://www.ebi.ac.uk/ena/submit/webin/login)
 
+**2. A registered study and study accession number**
 This can be found on the webin login page: 
-
 <p align="center">
   <img src="https://github.com/museomics/ukbol_submissions/blob/main/img/ENA_study_registration.png" width="600" height="500"
     alt="Webin register study">
 </p
-
-
 With a guide on how to register available [here](https://ena-docs.readthedocs.io/en/latest/submit/study.html).
 
-### 3. Spreadsheet of sample metadata 
-
+**3. Spreadsheet of sample metadata**
 - Format: CSV UTF-8
 - Must contain values for (at minimum) all mandatory fields listed in the [Tree of Life Checklist (ERC000053)](https://www.ebi.ac.uk/ena/browser/view/ERC000053)
 
@@ -65,10 +60,10 @@ With a guide on how to register available [here](https://ena-docs.readthedocs.io
 
 [Where data is missing record "missing: third party data" unless specified otherwise under INSDC Missing Value Reporting Terms](https://ena-docs.readthedocs.io/en/latest/submit/samples/missing-values.html)
 
-### 4. An install of R (v >4.3.0)
+**4. An install of R (v >4.3.0)**
 - Packages: dplyr and plyr
 
-### 5. An install of ENA bulk webin-cli
+**5. An install of ENA bulk webin-cli**
 This is available for install with associated information [here](https://github.com/enasequence/ena-bulk-webincli/tree/master)
 
 ## Sample Registration 
