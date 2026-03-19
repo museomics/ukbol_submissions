@@ -92,15 +92,18 @@ These are all done in R with the following R script: [sample_registration.R](htt
 **NOTE:** You will notice that at the end samples with no lat/lon metadata are parsed into a separate submission TSV file. This is because ENA treats lat/lon as mandatory fields if the header is present and therefore won't accept missing terms. 
 
 Once the TSVs have been generated you will need to add the following line above the header row: 
-`Checklist	ERC000053:1.6	Tree of Life Checklist`
-
+```
+Checklist	ERC000053:1.6	Tree of Life Checklist
+```
 And this below the header row 
-`#units										DD	DD						`
-
-OR the following if lat/lon not included: 
-`#units															`
-
-The TSV files are then ready for submission via the ENA Webin:
+```
+#units										DD	DD						
+```
+**OR** the following if lat/lon not included: 
+```
+#units															
+```
+The TSV files are then ready for submission via the ENA Webin.
 
 <p align="center">
   <img src="https://github.com/museomics/ukbol_submissions/blob/main/img/ENA_sample_registration.png" width="600" height="500"
@@ -136,52 +139,7 @@ This information is needed in a single TSV file that can be used to generate a [
 
 2. CSV: Sequence filepaths - this must have a minimum of 3 columns, unique sample name (`sample_alias`), forward read filepath (`uploaded.file.1`) and reverse read filepath (`uploaded.file.2`)
 
-To generate the TSV run the following R code - change defined variables according to needs: 
-
-```
-
-##############################################################################
-## SUBMIT READS                                                             ##
-##############################################################################
-
-library(dplyr)
-
-# Import files
-batch_file <- read.csv("sequencing_filepaths.csv", header = T, na.strings=c("")) 
-samples <- read.csv("ena-registered-samples.csv", header = T)
-
-# Define sequencing & library metadata:
-sequencing_platform <- "ELEMENT"
-sequencing_instrument <- "Element AVITI"
-library_source <- "GENOMIC"
-library_selection <- "RANDOM"
-library_strategy <-  "WGS"
-
-# Define Project Accession
-study_accession <- "PRJEBXXXXX"
-
-## Combine spreadsheets to patch file paths to sample accessions by sample_alias
-df <- batch_file %>%
-  left_join(samples, by = c("sample_alias" = "alias"))
-
-df <- df[!is.na(df$id),]
-df$experiment_name <- paste0("UKBOL_Accelerated_", df$sample_alias)
-
-submission <- data.frame(study_accession =  study_accession,
-                         sample_accession = df$id, 
-                         experiment_name = df$experiment_name,
-                         sequencing_platform = sequencing_platform, 
-                         sequencing_instrument = sequencing_instrument, 
-                         library_name = df$library_name, 
-                         library_source = library_source, 
-                         library_selection = library_selection, 
-                         library_strategy = library_strategy, 
-                         library_description	= df$library_description, 
-                         "uploaded file 1" = df$uploaded.file.1, 
-                         "uploaded file 2" = df$uploaded.file.2) 
-
-write.table(submission, "sequence_submission.tsv", row.names=FALSE, sep = "\t", quote = F) 
-```
+To generate the TSV run the R code [submit_reads.R](https://github.com/museomics/ukbol_submissions/blob/main/submit_reads.R)- where you change defined variables according to needs.
 
 Once this TSV is generated, it can be **validated** and then **submitted** to ENA via the [ena bulk webincli tool](https://github.com/enasequence/ena-bulk-webincli/tree/master).
 This tool takes the TSV and generates individual manifests before submitting the manifests and sequence data to ENA. 
