@@ -1,6 +1,9 @@
 # ENA SUBMISSIONS SOP AND WORKING CODE FOR UKBOL ACCELERATED
 
-![UKBOL Accelerted logo](https://github.com/museomics/ukbol_submissions/blob/main/img/UKBOL%20dragonfly.png)
+<p align="center">
+  <img src="https://github.com/museomics/ukbol_submissions/blob/main/img/UKBOL%20dragonfly.png" width="200" height="200"
+    alt="UKBOL Accelerated logo">
+</p>
 
 **Date:** 2026-03-19
 
@@ -10,7 +13,11 @@
 The following steps were used to prepare all files needed for submission of genomic skim data generated in UKBOL_Accelerated to the [European Nucleotide Archive (ENA)](https://www.ebi.ac.uk/ena/browser/home).
 Each is desgined based on instructions and requirements set by ENA as under their ENA metadata model. 
 
-![ENA metadata model flowchart](https://github.com/museomics/ukbol_submissions/blob/main/img/ENA_metadata_model.png)
+<p align="center">
+  <img src="https://github.com/museomics/ukbol_submissions/blob/main/img/ENA_metadata_model.png" width="600" height="500"
+    alt="ENA metadata model flowchart">
+</p
+  
 ###### Image taken from ENA's general guide. For more detailed information on their metadata model see [here](https://ena-docs.readthedocs.io/en/latest/submit/general-guide/metadata.html).
 
 ## Requirements
@@ -193,7 +200,10 @@ OR the following if lat/lon not included:
 
 The TSV files are then ready for submission via the ENA Webin:
 
-![ENA Webin sample registration](https://github.com/museomics/ukbol_submissions/blob/main/img/ENA_sample_registration.png)
+<p align="center">
+  <img src="https://github.com/museomics/ukbol_submissions/blob/main/img/ENA_sample_registration.png" width="600" height="500"
+    alt="ENA Webin sample registration">
+</p
 
 
 ## Sequencing read submission 
