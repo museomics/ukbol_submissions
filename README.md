@@ -156,19 +156,21 @@ This tool takes the TSV and generates individual manifests before submitting the
 
 To validate the TSV and generate the manifests the command would look like the following: 
 ```
-python /path/to/ena-bulk-webincli/bulk_webincli.py -u Webin-XXXXX -p XXXXXX -g reads -s sequence_submission_.tsv -m validate -d UKBOL_accelerated --webinCliPath /path/to/ena-bulk-webincli/webin-cli-9.0.1.jar
+python /path/to/ena-bulk-webincli/bulk_webincli.py -u Webin-XXXXX -p XXXXXX -g reads -s sequence_submission.tsv -m validate -d UKBOL_accelerated --webinCliPath /path/to/ena-bulk-webincli/webin-cli-9.0.1.jar
 ```
 
 **NOTE** You will have to specify the filepath to bulk_webincli.py based on where your install is. You will also have to specify your webin login details (`-u` and `-p` for username and password). The argument `-d` specifies the parent directory of your files to be uploaded
 To submit the manifests run change `-m validate` to `-m submit`: 
 
 ```
-python /path/to/ena-bulk-webincli/bulk_webincli.py -u Webin-XXXXX -p XXXXXX -g reads -s sequence_submission_.tsv -m submit -d UKBOL_accelerated --webinCliPath /path/to/ena-bulk-webincli/webin-cli-9.0.1.jar
+python /path/to/ena-bulk-webincli/bulk_webincli.py -u Webin-XXXXX -p XXXXXX -g reads -s sequence_submission.tsv -m submit -d UKBOL_accelerated --webinCliPath /path/to/ena-bulk-webincli/webin-cli-9.0.1.jar
 ```
 
 ## Mitogenome assembly submissions
 
-- Mitogenome success and submission strategy was assessed by contiguity, length and circularity of final scaffold:
+**Mitogenome successes**
+
+Mitogenome success and submission strategy was assessed by contiguity, length and circularity of final scaffold:
 
 |Category|Submission Type|Description|
 |---|---|---|
@@ -179,16 +181,40 @@ python /path/to/ena-bulk-webincli/bulk_webincli.py -u Webin-XXXXX -p XXXXXX -g r
 > All submissions are taxonomically validated to ensure no contamination
 > Any assemblies with gene duplications are removed
 
-To assess this, the `assess_mitogenomes.py` tool was run: 
+To assess this, the [assess_mitogenomes.R](https://github.com/museomics/ukbol_submissions/blob/main/assess_mitogenomes.R) tool. This is a script that contains a function that requires a single argument - the parent directory where all skim2ribo outputs are found. This can be run by sourcing the script to load the function and then running it with the right filepath: 
 
 ```
-python assess_mitogenomes.py --report report.txt --summary_tsv summary.tsv .
+source(assess_mitogenomes.R)
+assess_mitogenomes("/path/to/dir")
 ```
 
-If working in an environment that supports bash, you can find all available assemblies per sample the following `awk` line, which outputs a TSV of 2 columns (assembly filepath and sample name) 
+This function outputs 4 summary CSV files:
+1. A csv of all multi-contig assemblies that are eligible for submission
+2. A csv of all partial mitochondrial genome assemblies that are eligible for submission
+3. A csv of all complete mitochondrial genome assemblies that are eligible for submission
+4. A summary of the total number of each type of assembly
+
+
+**Mitogenome submissions**
+
+To submit mitogenomes the following is required: 
+1. Manifest metadata
+2. A GZIP compressed FASTA file
+3. A TSV of filepaths associated with each sample accession
+
+
+To get the filepaths for every skim2mito generated assembly run the following: 
 
 ```
- ls skim2mito_output/*/assembled_sequence/*.fasta | awk -F'/' '{name=$NF; sub(/\.fasta$/, "", name); print $0 "\t" name}' > fasta_files_with_basenames.tsv
+ls skim2mito_output/*/assembled_sequence/*.fasta.gz | awk -F'/' '{name=$NF; sub(/\.fasta$/, "", name); print $0 "\t" name}' > fasta_files_with_basenames.tsv
 ```
 
+To link the manifest metadata required, the filepaths and associated sample accessions, the R script [assembly_submissions.R]() was run. 
 
+Final assembly manifests were then submitted to ENA using a [modified version of the bulk_webincli.py tool]() using the following: 
+
+```
+python /path/to/ena-bulk-webincli/bulk_webincli_primary_assembly.py -u Webin-XXXXX -p XXXXXX -g reads -s assembly_submission.tsv -m validate -d UKBOL_accelerated --webinCliPath /path/to/ena-bulk-webincli/webin-cli-9.0.1.jar
+
+python /path/to/ena-bulk-webincli/bulk_webincli_primary_assembly.py -u Webin-XXXXX -p XXXXXX -g reads -s assembly_submission.tsv -m submit -d UKBOL_accelerated --webinCliPath /path/to/ena-bulk-webincli/webin-cli-9.0.1.jar
+```
