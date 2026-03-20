@@ -211,7 +211,7 @@ ls skim2mito_output/*/assembled_sequence/*.fasta.gz | awk -F'/' '{name=$NF; sub(
 
 To link the manifest metadata required, the filepaths and associated sample accessions, the R script [assembly_submissions.R]() was run. 
 
-Final assembly manifests were then submitted to ENA using a [modified version of the bulk_webincli.py tool]() using the following: 
+Final assembly manifests were then submitted to ENA using a [modified version of the bulk_webincli.py tool](https://github.com/Kamouyiaraki/ena-bulk-webincli_primary_assembly) using the following: 
 
 ```
 python /path/to/ena-bulk-webincli/bulk_webincli_primary_assembly.py -u Webin-XXXXX -p XXXXXX -g reads -s assembly_submission.tsv -m validate -d UKBOL_accelerated --webinCliPath /path/to/ena-bulk-webincli/webin-cli-9.0.1.jar
