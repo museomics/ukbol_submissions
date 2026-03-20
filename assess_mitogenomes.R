@@ -18,6 +18,10 @@ assess_mitogenomes <- function(directory){
   # Filter by main criteria: must be Insecta & must be >= 5000bp & must have min. 5 genes
   summary_filtered <- summary[summary$Length >= 5000 & summary$Class == "Insecta" & summary$N..genes >=5,]
 
+  # Remove any contigs with duplicated genes
+  torm <- grep("_", summary_filtered$Genes.list)
+  summary_filtered <- summary_filtered[-torm, ]
+  
   # Add in information about whether mtDNA is partial (linear) or complete (circular)
   summary_filtered$level <- "linear"
   summary_filtered$level[grep("circular", summary_filtered$Contig)] <- "circular"
@@ -28,12 +32,10 @@ assess_mitogenomes <- function(directory){
     mutate(N.contigs = n_distinct(Contig)) %>%
     ungroup()
 
-
   multi_contigs <- df[df$N.contigs>1, c("ID", "Contig")]
   multi_contigs <- multi_contigs %>%
     group_by(ID) %>%
     summarise(Contigs = paste(Contig, collapse = ","), .groups = "drop")
-
 
   linear <- df[df$N.contigs == 1 & df$level == "linear", c("ID", "Contig")] 
   circular <- df[df$N.contigs == 1 & df$level == "circular", c("ID", "Contig")]
