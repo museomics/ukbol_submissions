@@ -188,11 +188,20 @@ source(assess_mitogenomes.R)
 assess_mitogenomes("/path/to/dir")
 ```
 
-This function outputs 4 summary CSV files:
+This function outputs:
 1. A csv of all multi-contig assemblies that are eligible for submission
 2. A csv of all partial mitochondrial genome assemblies that are eligible for submission
 3. A csv of all complete mitochondrial genome assemblies that are eligible for submission
 4. A summary of the total number of each type of assembly
+5. A text file of valid contigs for each multi-contig sample
+
+The script [parse_contig_assemblies_fun.sh](https://github.com/museomics/ukbol_submissions/blob/main/parse_contig_assemblies_fun.sh) is then run on the output text files to filter out any contigs that are less than 5kbp, have been flagged as contaminant or contain multiple gene copies and to output final FASTA and matching BED (annotation) files. The shell script is a function and can be run as follows:
+
+```
+chmod +x parse_contig_assemblies_fun.sh
+./parse_contig_assemblies_fun.sh . ./parsed_files
+```
+
 
 
 **Mitogenome submissions**
@@ -209,12 +218,15 @@ To get the filepaths for every skim2mito generated assembly run the following:
 ls skim2mito_output/*/assembled_sequence/*.fasta.gz | awk -F'/' '{name=$NF; sub(/\.fasta$/, "", name); print $0 "\t" name}' > fasta_files_with_basenames.tsv
 ```
 
-To link the manifest metadata required, the filepaths and associated sample accessions, the R script [assembly_submissions.R]() was run. 
+To link the manifest metadata required, the filepaths and associated sample accessions, the R script [assembly_submissions.R]() was run as follows: 
+
+```
+
+```
 
 Final assembly manifests were then submitted to ENA using a [modified version of the bulk_webincli.py tool](https://github.com/Kamouyiaraki/ena-bulk-webincli_primary_assembly) using the following: 
 
 ```
 python /path/to/ena-bulk-webincli/bulk_webincli_primary_assembly.py -u Webin-XXXXX -p XXXXXX -g reads -s assembly_submission.tsv -m validate -d UKBOL_accelerated --webinCliPath /path/to/ena-bulk-webincli/webin-cli-9.0.1.jar
-
 python /path/to/ena-bulk-webincli/bulk_webincli_primary_assembly.py -u Webin-XXXXX -p XXXXXX -g reads -s assembly_submission.tsv -m submit -d UKBOL_accelerated --webinCliPath /path/to/ena-bulk-webincli/webin-cli-9.0.1.jar
 ```
