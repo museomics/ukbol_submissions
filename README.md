@@ -1,5 +1,8 @@
 # ENA SUBMISSIONS SOP FOR UKBOL ACCELERATED
 
+[![DOI](https://zenodo.org/badge/1186149562.svg)](https://doi.org/10.5281/zenodo.19132437)
+
+
 <p align="center">
   <img src="https://github.com/museomics/ukbol_submissions/blob/main/img/UKBOL%20dragonfly.png" width="200" height="200"
     alt="UKBOL Accelerated logo">
