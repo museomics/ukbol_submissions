@@ -13,7 +13,7 @@
 **Author:** Maria Kamouyiaros@NHMUK
 
 ## Background
-The following steps were used to prepare all files needed for submission of genomic skim data generated in UKBOL_Accelerated to the [European Nucleotide Archive (ENA)](https://www.ebi.ac.uk/ena/browser/home).
+The following steps were used to prepare all files needed for submission of genomic skim data generated in UKBOL_Accelerated to the [European Nucleotide Archive (ENA)](https://www.ebi.ac.uk/ena/browser/home), with the assumption that work is performed from a HPC or unix operating system with full access to all UKBOL pipeline outputs and data. 
 Each is desgined based on instructions and requirements set by ENA as under their [ENA metadata model](https://ena-docs.readthedocs.io/en/latest/submit/general-guide/metadata.html). 
 
 <p align="center">
@@ -66,10 +66,17 @@ With a guide on how to register available [here](https://ena-docs.readthedocs.io
 [Where data is missing record "missing: third party data" unless specified otherwise under INSDC Missing Value Reporting Terms](https://ena-docs.readthedocs.io/en/latest/submit/samples/missing-values.html)
 
 **4. An install of R (v >4.3.0)**
+- This can be on any operating system you like
 - Packages: dplyr and plyr
 
-**5. An install of ENA bulk webin-cli**
-This is available for install with associated information [here](https://github.com/enasequence/ena-bulk-webincli/tree/master)
+**5. An install of Python (v >3.11)**
+- Many scripts (e.g., ENA bulk webin-cli and assess_mitogenomes.py) require python to run (run with Python v3.12.8)
+
+**6. An install of ENA bulk webin-cli**
+- This is available for install with associated information [here](https://github.com/enasequence/ena-bulk-webincli/tree/master)
+
+**7. Access to skim2mito outputs**
+- This is generated as part of the UKBOL Accelerated pipeline, where [skim2mito](https://github.com/o-william-white/skim2mito) was run on all samples, with outputs sent to a single parent directory called `skim2mito_outputs`
 
 ## Sample Registration 
 
@@ -161,8 +168,27 @@ python /path/to/ena-bulk-webincli/bulk_webincli.py -u Webin-XXXXX -p XXXXXX -g r
 
 ## Mitogenome assembly submissions
 
-- Mitogenome success assessed by contiguity, length and circularity of final scaffold (considered complete if circularised by getOrganelle v XXXX; partial = single, non-circularised scaffold of minimum length of 5kbp)
-- Multi-contig mitogenome assemblies were then assessed for taxonomic assignment, protein-coding gene duplications and gene content (contig assembly considered on where minimum of 5 genes found on each contig, and each contig is taxonomically placed in the correct order to prevent upload of non-target/contaminant mitogenome assemblies).
-- Complete and partial mitogenomes are uploaded as [assemblies](https://ena-docs.readthedocs.io/en/latest/submit/assembly/genome.html)
-- Multi-contig assemblies are uploaded as [targeted sequences](https://ena-docs.readthedocs.io/en/latest/submit/sequence.html
-- Annotations in all cases were connected to sequence data and stored in ENA compatible [FLATFILE format] (https://ena-docs.readthedocs.io/en/latest/submit/fileprep/flat-file-example.html) 
+- Mitogenome success and submission strategy was assessed by contiguity, length and circularity of final scaffold:
+
+|Category|Submission Type|Description|
+|---|---|---|
+|Complete mtDNA chromosome| [Chromosome-level assembly](https://ena-docs.readthedocs.io/en/latest/submit/assembly/genome.html) |considered complete if circularised by getOrganelle in [the skim2mito run used to generate the data](https://github.com/o-william-white/skim2mito)|
+|Partial mtDNA chromosome | [Chromosome-level assembly](https://ena-docs.readthedocs.io/en/latest/submit/assembly/genome.html)| A single, non-circularised scaffold of minimum length of 5kbp|
+|mtDNA assembly| [Contig-level assembly](https://ena-docs.readthedocs.io/en/latest/submit/assembly/genome.html)| Multi-contig assembly, where a minimum of 5 protein-coding genes are present per contig|
+
+> All submissions are taxonomically validated to ensure no contamination
+> Any assemblies with gene duplications are removed
+
+To assess this, the `assess_mitogenomes.py` tool was run: 
+
+```
+python assess_mitogenomes.py --report report.txt --summary_tsv summary.tsv .
+```
+
+If working in an environment that supports bash, you can find all available assemblies per sample the following `awk` line, which outputs a TSV of 2 columns (assembly filepath and sample name) 
+
+```
+ ls skim2mito_output/*/assembled_sequence/*.fasta | awk -F'/' '{name=$NF; sub(/\.fasta$/, "", name); print $0 "\t" name}' > fasta_files_with_basenames.tsv
+```
+
+
