@@ -1,5 +1,7 @@
 #########################################################################
 ## PREP SPREADSHEET FOR ENA SUBMISSION                                 ##
+## Author: Maria Kamouyiaros @NHMUK                                    ##
+## Date: 2026-03-16                                                    ##
 #########################################################################
 library(dplyr)
 library(plyr)
