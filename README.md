@@ -181,11 +181,12 @@ Mitogenome success and submission strategy was assessed by contiguity, length an
 > All submissions are taxonomically validated to ensure no contamination
 > Any assemblies with gene duplications are removed
 
-To assess this, the [assess_mitogenomes.R](https://github.com/museomics/ukbol_submissions/blob/main/assess_mitogenomes.R) tool. This is a script that contains a function that requires a single argument - the parent directory where all skim2ribo outputs are found. This can be run by sourcing the script to load the function and then running it with the right filepath: 
+To assess this, the [assess_mitogenomes.R](https://github.com/museomics/ukbol_submissions/blob/main/assess_mitogenomes.R) tool. This is a script that contains a function that requires a single argument - the parent directory where all skim2ribo outputs are found. This was run **twice**, once for all batches and once for any repeat sequencing. This can be run by sourcing the script to load the function and then running it with the right filepath: 
 
 ```
 source(assess_mitogenomes.R)
-assess_mitogenomes("/path/to/dir")
+assess_mitogenomes("./skim2mito_summaries")
+assess_mitogenomes("./skim2mito_repeatseq")
 ```
 
 This function outputs:
